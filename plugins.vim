@@ -176,6 +176,9 @@ let g:qfenter_keymap = {}
 let g:qfenter_keymap.vopen = ['<C-v>']
 let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
 
+let g:copilot_filetypes = {
+    \ 'markdown': v:false,
+    \ }
 Plug 'github/copilot.vim'
 
 Plug 'vim-python/python-syntax'

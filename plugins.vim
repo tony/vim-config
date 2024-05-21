@@ -178,6 +178,10 @@ let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
 
 let g:copilot_filetypes = {
     \ 'markdown': v:false,
+    \ 'rst': v:false,
+    \ 'zsh': v:false,
+    \ 'bash': v:false,
+    \ 'fish': v:false,
     \ }
 Plug 'github/copilot.vim'
 

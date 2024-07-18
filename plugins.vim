@@ -182,6 +182,7 @@ let g:copilot_filetypes = {
     \ 'zsh': v:false,
     \ 'bash': v:false,
     \ 'fish': v:false,
+    \ 'json': v:false,
     \ }
 Plug 'github/copilot.vim'
 

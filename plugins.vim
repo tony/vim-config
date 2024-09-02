@@ -293,3 +293,7 @@ function! OnLoadWilder()
 endfunction
 
 call plugin_loader#PlugOnLoad('wilder.nvim', 'call OnLoadWilder()')
+
+if has('nvim') && lib#SourceIfExists("~/.vim/plugins_nvim.vim")
+  source ~/.vim/plugins_nvim.vim
+endif

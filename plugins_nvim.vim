@@ -1,5 +1,8 @@
 " Only included if exists + has('neovim')
 
+" https://github.com/folke/tokyonight.nvim
+Plug 'folke/tokyonight.nvim'
+
 " avante.nvim
 " https://github.com/yetone/avante.nvim/blob/6b41c64/README.md
 

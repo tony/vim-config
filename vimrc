@@ -64,7 +64,9 @@ call settings#LoadSettings()
 
 call lib#SourceIfExists("~/.vim/settings/highlight.vim")
 
-if lib#ColorSchemeExists("tokyonight")
+if has('nvim') && lib#ColorSchemeExists("tokyonight-moon")
+  colorscheme tokyonight-moon
+elseif lib#ColorSchemeExists("tokyonight")
   colorscheme tokyonight  " Super similar to catppuccin_mocha
 elseif lib#ColorSchemeExists("catppuccin_mocha")
   colorscheme catppuccin_mocha

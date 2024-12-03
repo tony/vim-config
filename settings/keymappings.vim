@@ -45,6 +45,7 @@ function! NumberToggle()
 endfunc
 
 nnoremap <silent> <leader>7 :call NumberToggle()!<CR>
+nnoremap <silent> <leader>b :BLines<CR>
 
 
 

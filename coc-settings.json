@@ -97,4 +97,6 @@
 		"$HOME/.cargo/**",
 		"$HOME/.rustup/**"
 	],
+  "rust-analyzer.inlayHints.typeHints.enable": false,
+  "rust-analyzer.inlayHints.parameterHints.enable": false,
 }

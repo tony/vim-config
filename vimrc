@@ -1,79 +1,109 @@
-" http://stackoverflow.com/questions/9990219/vim-whats-the-difference-between-let-and-set
-" Borrows from https://github.com/terryma/dotfiles/blob/master/.vimrc
-" Borrows from https://github.com/klen/.vim
+"------------------------------------------------------------------------------
+" Basic Recommended Settings (optional)
+"------------------------------------------------------------------------------
+if v:version >= 800
+  set nocompatible
+  syntax on
+  filetype plugin indent on
+endif
 
-let g:SESSION_DIR   = $HOME.'/.cache/vim/sessions'
+" For older Vim versions (if needed):
+" set nocompatible
+" syntax enable
+" filetype plugin on
+" filetype indent on
 
-" ALE
+"------------------------------------------------------------------------------
+" Helper Function for Conditional Sourcing
+"------------------------------------------------------------------------------
+function! SourceIfExists(file) abort
+  if filereadable(expand(a:file))
+    execute 'source ' . fnameescape(a:file)
+  endif
+endfunction
+
+"------------------------------------------------------------------------------
+" Session / Directory Locations
+"------------------------------------------------------------------------------
+let g:SESSION_DIR = expand('$HOME/.cache/vim/sessions')
+
+"------------------------------------------------------------------------------
+" ALE Configuration
+"------------------------------------------------------------------------------
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
-let g:ale_list_window_size = 5  " Show 5 lines of errors (default: 10)
-" let g:ale_lint_on_text_changed = 'never'  " Remove lag
-let g:ale_lint_on_enter = 0  " no linting on entering file
+let g:ale_list_window_size = 5
+let g:ale_lint_on_enter = 0
 
+"------------------------------------------------------------------------------
+" Buffer & File Handling
+"------------------------------------------------------------------------------
 " Allow switching away from unsaved buffers
-" Or else FZF and :e will fail if moving away from buffer
-" https://superuser.com/a/163627
 set hidden
 
-" fix backspace
-" http://vim.wikia.com/wiki/Backspace_and_delete_problems#Backspace_key_won.27t_move_from_current_line
-set backspace=2 " make backspace work like most other programs
+" Fix backspace behavior
+set backspace=2
 
-" Don't create swap files
-set nobackup       "no backup files
-set nowritebackup  "only in case you don't want a backup file while editing
-set noswapfile     "no swap files
+" Disable swap/backup files
+set nobackup
+set nowritebackup
+set noswapfile
 
-" Glitchy behavior with parents, exception raising 
-set noshowmatch
-" https://stackoverflow.com/a/47361068
-" https://stackoverflow.com/a/47811468
-let g:loaded_matchparen=1  " or :NoMatchParen
+" Disable matchparen plugin (avoid glitchy behavior)
+let g:loaded_matchparen = 1
+" or use `:NoMatchParen`
 
-" Make :e and :vsp show directory relative to buffer
+" Automatically cd to directory of opened file
 set autochdir
 
-" Fix E353: Nothing in register "
-" Writes to the unnamed register also writes to the * and + registers. This
-" makes it easy to interact with the system clipboard
-if has ('unnamedplus')
+"------------------------------------------------------------------------------
+" Clipboard Behavior
+"------------------------------------------------------------------------------
+if has('unnamedplus')
   set clipboard=unnamedplus
 else
   set clipboard=unnamed
 endif
 
-" Try to fix issue where netrw is open and opened buffer not writable
-" (requiring :set bt=): https://github.com/tpope/vim-vinegar/issues/13
-autocmd FileType netrw setl bufhidden=delete
+"------------------------------------------------------------------------------
+" Netrw Tweak
+"------------------------------------------------------------------------------
+" Fix netrw so that its buffer is hidden when leaving
+autocmd FileType netrw setlocal bufhidden=delete
 
-"  Truecolor
-set termguicolors
-
-" https://github.com/tmux/tmux/issues/1246
-" How to use true colors in vim under tmux? #1246
+"------------------------------------------------------------------------------
+" Truecolor Support (especially under tmux)
+"------------------------------------------------------------------------------
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
 
-call lib#SourceIfExists("~/.vim/plugin_loader.vim")
+"------------------------------------------------------------------------------
+" Source Shared/Plugin Files
+"------------------------------------------------------------------------------
+call SourceIfExists("$HOME/.vim/plugin_loader.vim")
 call plugin_loader#PlugInit()
 call settings#LoadSettings()
+call SourceIfExists("$HOME/.vim/settings/highlight.vim")
 
-call lib#SourceIfExists("~/.vim/settings/highlight.vim")
+"------------------------------------------------------------------------------
+" Color Schemes - Fallback Logic
+"------------------------------------------------------------------------------
 
+" Typically, you'll have a function or autoload script lib#ColorSchemeExists()
+" to check if a color scheme is installed. Keeping your existing logic:
 if has('nvim') && lib#ColorSchemeExists("tokyonight-moon")
   colorscheme tokyonight-moon
 elseif lib#ColorSchemeExists("tokyonight")
-  colorscheme tokyonight  " Super similar to catppuccin_mocha
+  colorscheme tokyonight
 elseif lib#ColorSchemeExists("catppuccin_mocha")
   colorscheme catppuccin_mocha
 elseif lib#ColorSchemeExists("gruvbox")
   colorscheme gruvbox
 elseif lib#ColorSchemeExists("gruvbox-material")
-  let g:gruvbox_material_disable_italic_comment = 1  " This shows up as highlighted in kitty
+  let g:gruvbox_material_disable_italic_comment = 1
   colorscheme gruvbox-material
 elseif lib#ColorSchemeExists("everforest")
   if has('termguicolors')
@@ -90,4 +120,7 @@ else
   colorscheme desert
 endif
 
-call lib#SourceIfExists("~/.vimrc.local")
+"------------------------------------------------------------------------------
+" Local Customizations
+"------------------------------------------------------------------------------
+call SourceIfExists("$HOME/.vimrc.local")
